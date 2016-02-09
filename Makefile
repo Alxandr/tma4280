@@ -5,10 +5,11 @@ BIN = bin
 PROJECTS = $(patsubst $(SRC)/%, %, $(wildcard $(SRC)/*))
 
 CC = mpicc
-CFLAGS = -std=c1x
+CFLAGS = -std=c1x -fopenmp
 
+NP ?= 4
 EXEC = mpiexec
-EXECFLAGS = -np 4
+EXECFLAGS = -np $(NP)
 
 default:
 	@echo "Usage: make <PROJECT>"
@@ -45,7 +46,7 @@ $$(OBJ)/$1:
 	@mkdir -p $$@
 
 $$(BIN)/$1: $$(OBJECTS-$1) | $$(BIN)
-	$$(CC) $$(OBJECTS-$1) -Wall -o $$@
+	$$(CC) $$(OBJECTS-$1) -Wall -fopenmp -o $$@
 
 endef
 
