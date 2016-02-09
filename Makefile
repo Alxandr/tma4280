@@ -5,7 +5,7 @@ BIN = bin
 PROJECTS = $(patsubst $(SRC)/%, %, $(wildcard $(SRC)/*))
 
 CC = mpicc
-CFLAGS =
+CFLAGS = -std=c1x
 
 EXEC = mpiexec
 EXECFLAGS = -np 4
