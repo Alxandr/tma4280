@@ -1,3 +1,9 @@
+# Vagrant machines
+.vagrant
+
+# Compiled applications
+bin
+
 # Object files
 *.o
 *.ko
