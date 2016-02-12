@@ -22,6 +22,8 @@ Vector *generate(int n) {
 double sum(Vector *v, int offset) {
   int size = vector_size(v);
   double sum = 0.0;
+
+  #pragma omp parallel for schedule(static, 10) reduction(+:sum)
   for (int i = 1 + offset; i <= size; i++) {
     sum += vector_get(v, i);
   }
