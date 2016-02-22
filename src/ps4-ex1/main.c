@@ -34,7 +34,7 @@ void run(int k) {
   double Sn = sum(v);
   vector_free(v);
 
-  printf("|S-S%05d| = %f\n", n, fabs(S - Sn));
+  printf("|S-S%05d| = %.16f\n", n, fabs(S - Sn));
 }
 
 int main(int argc, char **argv)
@@ -47,4 +47,3 @@ int main(int argc, char **argv)
 
   return 0;
 }
-

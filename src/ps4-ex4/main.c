@@ -57,7 +57,7 @@ void run(int k, int rank) {
 
   vector_free(v);
 
-  printf("|S-S%05d| = %f\n", n, fabs(S - Sn_part));
+  printf("|S-S%05d| = %.16f\n", n, fabs(S - Sn_part));
 }
 
 int main(int argc, char **argv)
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 
   if (rank == 0) {
     // start root
-    #pragma omp parallel for schedule(guided, 1)
+    //#pragma omp parallel for schedule(guided, 1)
     for (int i = 3; i <= 14; i++) {
       run(i, size);
     }
@@ -106,4 +106,3 @@ int main(int argc, char **argv)
 
   return 0;
 }
-

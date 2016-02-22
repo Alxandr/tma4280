@@ -36,18 +36,17 @@ void run(int k) {
   double Sn = sum(v);
   vector_free(v);
 
-  printf("|S-S%05d| = %f\n", n, fabs(S - Sn));
+  printf("|S-S%05d| = %.16f\n", n, fabs(S - Sn));
 }
 
 int main(int argc, char **argv)
 {
   S = pow(M_PI, 2.0) / 6.0;
 
-  #pragma omp parallel for schedule(guided, 1)
+  //#pragma omp parallel for schedule(guided, 1)
   for (int i = 3; i <= 14; i++) {
     run(i);
   }
 
   return 0;
 }
-

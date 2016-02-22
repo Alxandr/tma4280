@@ -55,7 +55,7 @@ void run(int k, int rank) {
 
   vector_free(v);
 
-  printf("|S-S%05d| = %f\n", n, fabs(S - Sn_part));
+  printf("|S-S%05d| = %.16f\n", n, fabs(S - Sn_part));
 }
 
 int main(int argc, char **argv)
@@ -103,4 +103,3 @@ int main(int argc, char **argv)
 
   return 0;
 }
-
