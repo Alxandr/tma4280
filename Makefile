@@ -7,6 +7,9 @@ PROJECTS = $(patsubst $(SRC)/%, %, $(wildcard $(SRC)/*))
 CC = mpicc
 CFLAGS = -std=c1x -fopenmp
 
+FC = gfortran
+FFLAGS = 
+
 NP ?= 4
 EXEC = mpiexec
 EXECFLAGS = -np $(NP)
@@ -26,8 +29,8 @@ clean:
 
 define PROJECT_template
 
-SOURCES-$1 = $$(wildcard $$(SRC)/$1/*.c)
-OBJECTS-$1 = $$(patsubst $$(SRC)/$1/%.c,$$(OBJ)/$1/%.o,$$(SOURCES-$1))
+SOURCES-$1 = $$(wildcard $$(SRC)/$1/*.c) $$(wildcard $$(SRC)/$1/*.f)
+OBJECTS-$1 = $$(patsubst $$(SRC)/$1/%.c,$$(OBJ)/$1/%.o,$$(patsubst $$(SRC)/$1/%.f,$$(OBJ)/$1/%.o,$$(SOURCES-$1)))
 
 $1: $$(BIN)/$1
 
@@ -37,10 +40,13 @@ mpirun-$1: $$(BIN)/$1
 
 run-$1: $$(BIN)/$1
 	@echo "\n\n===== RUNNING APPLICATION =====\n"
-	@$$<
+	@$$< $$(FARGS)
 
 $$(OBJ)/$1/%.o: $$(SRC)/$1/%.c | $$(OBJ)/$1
 	$$(CC) $$(CFLAGS) -c $$< -o $$@
+
+$$(OBJ)/$1/%.o: $$(SRC)/$1/%.f | $$(OBJ)/$1
+	$$(FC) $$(FFLAGS) -c $$< -o $$@
 
 $$(OBJ)/$1:
 	@mkdir -p $$@
