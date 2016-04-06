@@ -34,6 +34,7 @@ void sine_transform_inverse(Vector *v, int len, double *buffer, int bufferLength
 }
 
 void transpose(Matrix *B_transposed, Matrix *B, int m) {
+  #pragma omp parallel for schedule(static) collapse(2)
   for (size_t i = 0; i < m; i++) {
     for (size_t j = 0; j < m; j++) {
     	matrix_set(B_transposed, i, j, matrix_get(B, j, i));
