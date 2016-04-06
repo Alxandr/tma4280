@@ -34,7 +34,7 @@ int parseArgs(int argc, char const *argv[]) {
   return atoi(argv[1]);
 }
 
-int main(int argc, char const *argv[]) {
+int omain(int argc, char const *argv[]) {
   int gridSize = parseArgs(argc, argv);
   double stepLength = 1.0 / gridSize;
 
@@ -115,7 +115,7 @@ int main(int argc, char const *argv[]) {
   return 0;
 }
 
-double rhs(Vector *grid, int i, int j) {
+inline double rhs(Vector *grid, int i, int j) {
   double x = vector_get(grid, i);
   double y = vector_get(grid, j);
   
