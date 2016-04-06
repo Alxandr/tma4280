@@ -39,7 +39,3 @@ void vector_set(Vector *v, int index, double value) {
 
   v->values[index] = value;
 }
-
-double *vector_raw(Vector *v) {
-  return v->values;
-}

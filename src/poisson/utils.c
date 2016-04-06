@@ -25,12 +25,12 @@ double matrix_max(Matrix *m) {
 	return max;
 }
 
-void sine_transform(Vector *v, int len, double *buffer, int bufferLength) {
-	fst_(vector_raw(v), &len, buffer, &bufferLength);
+void sine_transform(double *v, int len, double *buffer, int bufferLength) {
+	fst_(v, &len, buffer, &bufferLength);
 }
 
-void sine_transform_inverse(Vector *v, int len, double *buffer, int bufferLength) {
-	fstinv_(vector_raw(v), &len, buffer, &bufferLength);
+void sine_transform_inverse(double *v, int len, double *buffer, int bufferLength) {
+	fstinv_(v, &len, buffer, &bufferLength);
 }
 
 void transpose(Matrix *B_transposed, Matrix *B, int m) {
