@@ -5,7 +5,7 @@ BIN = bin
 PROJECTS = $(patsubst $(SRC)/%, %, $(wildcard $(SRC)/*))
 
 CC = mpicc
-CFLAGS = -std=c1x -fopenmp
+CFLAGS = -std=c1x -fopenmp -Werror
 
 FC = gfortran
 FFLAGS = 
@@ -29,6 +29,7 @@ clean:
 
 define PROJECT_template
 
+HEADERS-$1 = $$(wildcard $$(SRC)/$1/*.h)
 SOURCES-$1 = $$(wildcard $$(SRC)/$1/*.c) $$(wildcard $$(SRC)/$1/*.f)
 OBJECTS-$1 = $$(patsubst $$(SRC)/$1/%.c,$$(OBJ)/$1/%.o,$$(patsubst $$(SRC)/$1/%.f,$$(OBJ)/$1/%.o,$$(SOURCES-$1)))
 
@@ -42,7 +43,7 @@ run-$1: $$(BIN)/$1
 	@echo "\n\n===== RUNNING APPLICATION =====\n"
 	@$$< $$(FARGS)
 
-$$(OBJ)/$1/%.o: $$(SRC)/$1/%.c | $$(OBJ)/$1
+$$(OBJ)/$1/%.o: $$(SRC)/$1/%.c | $$(HEADERS-$1) $$(OBJ)/$1
 	$$(CC) $$(CFLAGS) -c $$< -o $$@
 
 $$(OBJ)/$1/%.o: $$(SRC)/$1/%.f | $$(OBJ)/$1
