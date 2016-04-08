@@ -12,6 +12,9 @@ double *_buffer;
 double *buffer() {
   if (!_buffer) {
     _buffer = malloc(sizeof(double) * bufferSize);
+    
+    #pragma omp atomic
+    gThreads++;
   }
 
   return _buffer;
@@ -101,6 +104,7 @@ void max(double *val) {
 }
 
 void init(int gridSize) {
+  gThreads = 0;
   gN = gridSize;
   int rowSize = gM = gridSize - 1;
   MPI_Type_contiguous(rowSize, MPI_DOUBLE, &MPI_MATRIX_ROW);

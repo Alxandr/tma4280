@@ -84,8 +84,10 @@ int main(int argc, char **argv)
   double u_max;
   max(&u_max);
 
-  if (gRank == 0)
+  if (gRank == 0) {
     printf("u_max = %e\n", u_max);
+    printf("threads = %d\n", gThreads);
+  }
 
   MPI_Barrier(MPI_COMM_WORLD);
   printf("node %d: exiting\n", gRank);

@@ -34,6 +34,9 @@ double *recvbuffer;
 // Send buffer
 double *sendbuffer;
 
+// Number of threads used
+int gThreads;
+
 double *buffer();
 void init(int problemSize);
 
