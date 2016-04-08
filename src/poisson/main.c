@@ -31,6 +31,9 @@ int main(int argc, char **argv)
   MPI_Comm_size(MPI_COMM_WORLD , &gSize);
   MPI_Comm_rank(MPI_COMM_WORLD , &gRank);
 
+  MPI_Barrier(MPI_COMM_WORLD);
+  double start_time = MPI_Wtime();
+
   int size;
   if (gRank == 0) {
     size = 2048;
@@ -84,9 +87,13 @@ int main(int argc, char **argv)
   double u_max;
   max(&u_max);
 
+  double end_time = MPI_Wtime();
+  MPI_Barrier(MPI_COMM_WORLD);
+
   if (gRank == 0) {
     printf("u_max = %e\n", u_max);
     printf("threads = %d\n", gThreads);
+    printf("time = %.2f seconds\n", end_time - start_time);
   }
 
   MPI_Barrier(MPI_COMM_WORLD);
