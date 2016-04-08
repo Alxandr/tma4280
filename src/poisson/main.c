@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
   int size;
   if (gRank == 0) {
-    size = parseArgs(argc, argv);
+    size = parseArgs(argc, &argv);
   }
 
   MPI_Bcast(&size, 1, MPI_INT, 0, MPI_COMM_WORLD);
