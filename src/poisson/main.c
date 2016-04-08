@@ -25,7 +25,7 @@ double rhs(int i, int j) {
   return 2 * (y - y*y + x - x*x);
 }
 
-int parseArgs(int argc, char const *argv[]) {
+int parseArgs(int argc, char **argv) {
   if (argc < 2) {
     printf("Usage:\n");
     printf("  poisson n\n\n");
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
   int size;
   if (gRank == 0) {
-    size = parseArgs(argc, &argv);
+    size = parseArgs(argc, argv);
   }
 
   MPI_Bcast(&size, 1, MPI_INT, 0, MPI_COMM_WORLD);
