@@ -105,6 +105,7 @@ int main(int argc, char **argv)
   if (gRank == 0) {
     printf("u_max = %e\n", u_max);
     printf("threads = %d\n", gThreads);
+    printf("N = %d\n", size);
     printf("time = %.2f seconds\n", end_time - start_time);
   }
 
