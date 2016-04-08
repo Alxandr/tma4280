@@ -56,3 +56,7 @@ void matrix_set(Matrix *m, int row, int column, double value) {
 
   m->data[row * m->columns + column] = value;
 }
+
+double *matrix_raw(Matrix *m) {
+  return m->data;
+}

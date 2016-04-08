@@ -11,3 +11,4 @@ void matrix_set(Matrix *m, int row, int column, double value);
 double matrix_get(Matrix *m, int row, int column);
 int matrix_rows(Matrix *m);
 int matrix_cols(Matrix *m);
+double *matrix_raw(Matrix *m);
