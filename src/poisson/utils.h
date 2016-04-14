@@ -4,6 +4,12 @@
 #include "matrix.h"
 #include "mpi.h"
 
+typedef double (gridFn)(int x, int y);
+typedef struct {
+  double u_max;
+  double err_max;
+} results;
+
 // Datatype for a single matrix row
 MPI_Datatype MPI_MATRIX_ROW;
 
@@ -44,7 +50,7 @@ void transpose();
 void transform();
 void inverse();
 
-void max(double *out);
+void process_results(gridFn *getExact, results *results);
 
 void print_rows(char *title, double *data, int rowsCount, int rowLength);
 

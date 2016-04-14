@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "math.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -32,7 +33,7 @@ void transform() {
 }
 
 void inverse() {
-  //#pragma omp parallel for schedule(static)
+  #pragma omp parallel for schedule(static)
   for (size_t i = 0; i < gVectors; i++) {
     fstinv_(recvbuffer + (i * gM), &gN, buffer(), &bufferSize);
   }
@@ -89,18 +90,27 @@ void transpose() {
   //   print_rows("post transpose: ", recvbuffer, gVectors, gM);
 }
 
-void max(double *val) {
-  double result = 0.0;
+void process_results(gridFn *getExact, results *res) {
+  double u_max = 0.0;
+  double offset_max = 0.0;
   for (size_t i = 0; i < gVectors; i++) {
     for (size_t j = 0; j < gM; j++) {
-      double v = recvbuffer[i * gM + j];
-      if (v > result) {
-        result = v;
+      double value = recvbuffer[i * gM + j];
+      double exact = getExact(i + gOffset, j);
+      double offset = fabs(value - exact);
+      
+      if (value > u_max) {
+        u_max = value;
+      }
+
+      if (offset > offset_max) {
+        offset_max = offset;
       }
     }
   }
 
-  MPI_Reduce(&result, val, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+  MPI_Reduce(&u_max, &res->u_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+  MPI_Reduce(&offset_max, &res->err_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 }
 
 void init(int gridSize) {
@@ -177,7 +187,7 @@ void debug_system(char *title) {
         printf("%d: [", (int)(scatterdispls[i] + j));
         for (size_t k = 0; k < gM; k++) {
           if (k > 0) printf(", ");
-          printf("%f", recvbuffer[j * gM + k]);
+          printf("%e", recvbuffer[j * gM + k]);
         }
         printf("]\n");
       }

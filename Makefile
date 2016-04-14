@@ -37,7 +37,7 @@ $1: $$(BIN)/$1
 
 mpirun-$1: $$(BIN)/$1
 	@echo "\n\n===== RUNNING APPLICATION WITH MPI =====\n"
-	$$(EXEC) $$(EXECFLAGS) $$<
+	$$(EXEC) $$(EXECFLAGS) $$< $$(FARGS)
 
 run-$1: $$(BIN)/$1
 	@echo "\n\n===== RUNNING APPLICATION =====\n"

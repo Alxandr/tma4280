@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
 
+#include "math.h"
 #include "mpi.h"
 #include "vector.h"
 #include "utils.h"
@@ -22,7 +22,20 @@ double grid(int i) {
 double rhs(int i, int j) {
   double x = grid(i), y = grid(j);
 
-  return 2 * (y - y*y + x - x*x);
+  //double ret = 2 * (y - y*y + x - x*x);
+  //if (i == 0 || j == 0 || i == gM - 1 || j == gM - 1) {
+  //  ret += 2000000;
+  //}
+
+  //return ret;
+  return 5 * PI * PI * sin(PI * x) * sin(2 * PI * y);
+}
+
+double rhs_exact(int i, int j) {
+  double x = grid(i);
+  double y = grid(j);
+
+  return sin(PI * x) * sin(2 * PI * y);
 }
 
 int parseArgs(int argc, char **argv) {
@@ -80,6 +93,7 @@ int main(int argc, char **argv)
   //debug_system("transform");
   transpose();
   inverse();
+  //debug_system("pre solve lambda");
 
   // Solve Lambda * Xtilde = Btilde
   #pragma omp parallel for schedule(static) collapse(2)
@@ -88,22 +102,25 @@ int main(int argc, char **argv)
       recvbuffer[i * gM + j] /= vector_get(diag, gOffset + i) + vector_get(diag, j);
     }
   }
+  //debug_system("solved lambda xtilde");
 
   // Calculate X = S^-1 * (S * Xtilde^T)
   transform();
   transpose();
   inverse();
+  //debug_system("done");
 
 
   // Calculate maximal value of solution
-  double u_max;
-  max(&u_max);
+  results res;
+  process_results(&rhs_exact, &res);
 
   double end_time = MPI_Wtime();
   MPI_Barrier(MPI_COMM_WORLD);
 
   if (gRank == 0) {
-    printf("u_max = %e\n", u_max);
+    printf("u_max = %e\n", res.u_max);
+    printf("err_max = %e\n", res.err_max);
     printf("threads = %d\n", gThreads);
     printf("N = %d\n", size);
     printf("time = %.2f seconds\n", end_time - start_time);
